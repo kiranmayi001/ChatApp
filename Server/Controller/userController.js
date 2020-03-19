@@ -27,7 +27,7 @@ exports.registerUser = (req, res) => {
         console.log("error in registration invalid input", errors);
     } else {
         console.log(req.body);
-        userService(req, (err, data) => {
+        userService.userreg(req, (err, data) => {
             if (err) {
                 res.status(202).send(err);
             } else {
@@ -49,7 +49,7 @@ exports.userLogin=(req,res)=>{
     req.checkBody("email", "Email is invalid").isEmail();
 
     const errors = req.validationErrors();
-    userService(req,(err,data)=>{ //if only exports to userreg then we use userService.userreg()
+    userService.userlog(req,(err,data)=>{ //if only exports to userreg then we use userService.userreg()
         if(errors)
         {
             res.status(203).send(errors);
@@ -66,7 +66,7 @@ exports.userLogin=(req,res)=>{
 
 //-----------------------Validation ForGot Password-----------------------------//
 //forgot Password
-exports.forgotPassword = (req, res) => {
+exports.forgotpassword = (req, res) => {
     //checking email is valid or not
     req.checkBody("email", "Email is invalid").isEmail();
 
@@ -74,9 +74,9 @@ exports.forgotPassword = (req, res) => {
     const errors = req.validationErrors();
     //if Validation gets error send response to the user
     if (errors) {
-        res.status(422).send(errors);
+        res.status(203).send(errors);
     } else {
-        userService(req, (err, data) => {
+        userService.forgotPassword(req, (err, data) => {
             if (err) {
                 res.status(402).send(err);
             } else {
@@ -84,4 +84,25 @@ exports.forgotPassword = (req, res) => {
             }
         });
     }
+};
+//---------------------------------RESRT PASSWORD VALIDATION--------------------------------//
+exports.resetpassword=(req,res)=>
+{
+    // console.log(req.body);
+    req.checkBody("password", "Password is invalid").notEmpty();
+    req.checkBody("Confirmpassword", "Password is invalid").notEmpty();
+    const errors = req.validationErrors();
+    //if Validation gets error send response to the user
+    if (errors) {
+        res.status(204).send(errors);
+    } else {
+    userService.resetPassword(req, (err,data)=>{
+        if (err) {
+            res.status(402).send(err);
+        } else {
+            res.send({ message: "Changed password Successfully", data: data });
+        }
+
+    });
+}
 };

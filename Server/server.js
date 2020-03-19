@@ -1,3 +1,5 @@
+
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -5,6 +7,7 @@ const routes = require('./Routes/route');
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
 const expressValidator = require('express-validator');
+
 
 //support parsing of application/x-www-form-urlencoded post data
 
@@ -31,8 +34,8 @@ mongoose.connect(dbConfig.url, {
     .catch(() => {
         console.log('Could not connect to the database');
         process.exit();
-    })
-app.listen(3000, () => {
+    });
+app.listen(3000,() => {
     console.log("Server is listening on port : 3000")
 });
 
